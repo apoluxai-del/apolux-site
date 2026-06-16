@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apolux — Illuminate · Automate · Evolve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="apolux-icon.svg">
+<style>
+  :root {
+    --deep: #080E1C;
+    --navy: #0D1525;
+    --card: #111827;
+    --border: rgba(255,255,255,0.07);
+    --border-glow: rgba(59,106,255,0.3);
+    --blue: #3B6AFF;
+    --blue-light: #5C87FF;
+    --gold: #F0C040;
+    --gold-dim: rgba(240,192,64,0.12);
+    --white: #F0F4FF;
+    --muted: rgba(240,244,255,0.45);
+    --dimmer: rgba(240,244,255,0.2);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(8,14,28,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem; font-weight: 700;
+    letter-spacing: 0.15em; color: var(--white);
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .logo-icon::before {
+    content: '';
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  .logo-icon::after {
+    content: '';
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 1px solid rgba(240,192,64,0.4);
+    border-radius: 50%;
+  }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.88rem; letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--blue);
+    color: var(--white); border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.88rem; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: var(--blue-light); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(59,106,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,106,255,0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 100%);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(59,106,255,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-55%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 0.5px solid var(--border-glow);
+    background: rgba(59,106,255,0.08);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.78rem; letter-spacing: 0.1em;
+    color: var(--blue-light);
+    margin-bottom: 2rem;
+    position: relative;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--blue-light);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .hero-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.25em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 700; line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 .accent { color: var(--blue); }
+  .hero-tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; letter-spacing: 0.2em;
+    color: var(--gold); margin-top: 0.5rem;
+  }
+  .hero-desc {
+    max-width: 540px;
+    font-size: 1.05rem; color: var(--muted);
+    margin: 1.5rem auto 2.5rem;
+    line-height: 1.7;
+    position: relative;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; align-items: center;
+    flex-wrap: wrap; justify-content: center;
+    position: relative;
+  }
+  .btn-primary {
+    background: var(--blue); color: var(--white);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-2px); }
+  .btn-secondary {
+    background: transparent; color: var(--white);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.5); transform: translateY(-2px); }
+  .arrow-icon { font-size: 1.1rem; }
+
+  .hero-stats {
+    display: flex; gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 0.5px solid var(--border);
+    position: relative;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem; font-weight: 700;
+    color: var(--white);
+    display: block;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.05em; }
+
+  /* SECTION COMMON */
+  section { padding: 6rem 4rem; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.01em;
+    max-width: 640px;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--muted);
+    max-width: 560px; margin-top: 1rem; line-height: 1.7;
+  }
+  .centered { text-align: center; }
+  .centered .section-title, .centered .section-sub { margin-left: auto; margin-right: auto; }
+
+  /* SERVIÇOS */
+  #servicos { background: var(--navy); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5px;
+    margin-top: 4rem;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .service-card {
+    background: var(--card);
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: background 0.3s;
+    cursor: default;
+  }
+  .service-card:hover { background: #161e30; }
+  .service-card::after {
+    content: '';
+    position: absolute;
+    inset: 0; border-right: 1.5px solid var(--border);
+  }
+  .service-icon {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    background: var(--gold-dim);
+    border: 0.5px solid rgba(240,192,64,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 1.5rem;
+  }
+  .service-card h3 {
+    font-size: 1.1rem; font-weight: 600;
+    margin-bottom: 0.75rem; color: var(--white);
+  }
+  .service-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+  .service-tag {
+    display: inline-block; margin-top: 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.1em;
+    color: var(--blue-light);
+    background: rgba(59,106,255,0.1);
+    border: 0.5px solid rgba(59,106,255,0.2);
+    padding: 0.25rem 0.6rem; border-radius: 4px;
+  }
+
+  /* COMO FUNCIONA */
+  #metodologia { background: var(--deep); }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+    position: relative;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 2.5rem; left: 12%; right: 12%;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+  }
+  .step {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .step-icon {
+    width: 56px; height: 56px; margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--border-glow);
+    background: rgba(59,106,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+  }
+  .step h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .step p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+
+  /* NICHOS */
+  #nichos { background: var(--navy); }
+  .nichos-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2rem; margin-top: 4rem;
+  }
+  .nicho-card {
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    transition: border-color 0.3s;
+  }
+  .nicho-card:hover { border-color: rgba(59,106,255,0.3); }
+  .nicho-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 2rem;
+  }
+  .nicho-emoji { font-size: 2rem; }
+  .nicho-header h3 { font-size: 1.2rem; font-weight: 600; }
+  .nicho-header span { font-size: 0.8rem; color: var(--muted); }
+  .nicho-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .nicho-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.9rem; color: var(--muted); line-height: 1.5;
+  }
+  .nicho-list li::before {
+    content: '→'; color: var(--blue-light);
+    flex-shrink: 0; margin-top: 1px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  /* APOLO */
+  #apolo {
+    background: var(--deep);
+    position: relative; overflow: hidden;
+  }
+  .apolo-glow {
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(59,106,255,0.08) 0%, transparent 70%);
+    right: -100px; top: 50%; transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .apolo-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+  }
+  .apolo-badge {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: rgba(59,106,255,0.08);
+    border: 0.5px solid var(--border-glow);
+    border-radius: 100px;
+    padding: 0.5rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .apolo-badge-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .apolo-badge-icon::before {
+    content: ''; width: 8px; height: 8px;
+    background: var(--gold); border-radius: 50%;
+  }
+  .apolo-badge span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.1em;
+    color: var(--blue-light);
+  }
+  .apolo-text h2 {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700; line-height: 1.1;
+    letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .apolo-fullname {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.15em;
+    color: var(--muted); margin-bottom: 2rem;
+  }
+  .apolo-text p { color: var(--muted); line-height: 1.7; margin-bottom: 1.5rem; }
+  .apolo-capabilities {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    margin-top: 2rem;
+  }
+  .cap-item {
+    background: rgba(59,106,255,0.06);
+    border: 0.5px solid var(--border);
+    border-radius: 10px; padding: 1rem;
+  }
+  .cap-item h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--white); }
+  .cap-item p { font-size: 0.78rem; color: var(--muted); }
+  .apolo-visual {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .apolo-ring-outer {
+    width: 320px; height: 320px; border-radius: 50%;
+    border: 1px solid rgba(240,192,64,0.15);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    animation: spin-slow 30s linear infinite;
+  }
+  .apolo-ring-outer::before {
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    top: 8px; left: 50%; transform: translateX(-50%);
+  }
+  @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .apolo-ring-inner {
+    width: 220px; height: 220px; border-radius: 50%;
+    border: 1px solid rgba(59,106,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    animation: spin-slow 15s linear infinite reverse;
+  }
+  .apolo-ring-inner::before {
+    content: '';
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--blue-light);
+    border-radius: 50%;
+    top: -3px; left: 50%; transform: translateX(-50%);
+  }
+  .apolo-core {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,106,255,0.2) 0%, rgba(59,106,255,0.05) 100%);
+    border: 1px solid var(--border-glow);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    animation: none;
+  }
+  .apolo-core-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem; font-weight: 700; color: var(--white);
+    animation: none;
+  }
+  .apolo-core span {
+    font-size: 0.6rem; letter-spacing: 0.15em;
+    color: var(--muted); margin-top: 4px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* FERRAMENTAS */
+  #ferramentas { background: var(--navy); }
+  .tools-row {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    margin-top: 3rem;
+  }
+  .tool-pill {
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.88rem; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .tool-pill:hover { border-color: rgba(59,106,255,0.3); color: var(--white); }
+  .tool-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+
+  /* PLANO 90 DIAS */
+  #plano { background: var(--deep); }
+  .timeline {
+    margin-top: 4rem;
+    display: flex; flex-direction: column; gap: 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 2.8rem; top: 0; bottom: 0;
+    width: 1px; background: linear-gradient(180deg, var(--blue) 0%, var(--border) 100%);
+  }
+  .timeline-item {
+    display: flex; gap: 2rem; align-items: flex-start;
+    padding: 0 0 3rem 0;
+    position: relative;
+  }
+  .tl-dot {
+    width: 2.6rem; height: 2.6rem; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; font-weight: 700; color: var(--blue);
+    position: relative; z-index: 1;
+  }
+  .tl-content { padding-top: 0.4rem; }
+  .tl-content h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .tl-content p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+
+  /* CTA */
+  #contato {
+    background: var(--navy);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute;
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse, rgba(59,106,255,0.1) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .cta-card {
+    position: relative;
+    background: var(--card);
+    border: 0.5px solid var(--border-glow);
+    border-radius: 20px;
+    padding: 4rem 3rem;
+    max-width: 700px; margin: 0 auto;
+  }
+  .cta-card h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.1;
+    letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .cta-card p { color: var(--muted); margin-bottom: 2.5rem; font-size: 1rem; }
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .cta-contact {
+    margin-top: 2.5rem; padding-top: 2rem;
+    border-top: 0.5px solid var(--border);
+    font-size: 0.85rem; color: var(--muted);
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+  }
+  .cta-contact a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .cta-contact a:hover { color: var(--white); }
+
+  /* FOOTER */
+  footer {
+    background: var(--deep);
+    padding: 2.5rem 4rem;
+    border-top: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem; letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .footer-tag {
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    color: var(--gold); margin-top: 4px;
+  }
+  footer p { font-size: 0.78rem; color: var(--dimmer); }
+
+  /* RESPONSIVO */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .apolo-layout { grid-template-columns: 1fr; }
+    .apolo-visual { display: none; }
+    .nichos-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .steps::before { display: none; }
+    .hero-stats { gap: 2rem; flex-wrap: wrap; justify-content: center; }
+    footer { padding: 2rem 1.5rem; text-align: center; justify-content: center; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon"></div>
+    APOLUX
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#apolo">A.P.O.L.O.</a></li>
+    <li><a href="#nichos">Nichos</a></li>
+    <li><a href="#plano">Metodologia</a></li>
+  </ul>
+  <a href="#contato" class="nav-cta">Falar com a Apolux →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    IA + Automação para negócios brasileiros
+  </div>
+
+  <p class="hero-sub">Retori Apolônio Brothers · Technology & AI</p>
+
+  <h1>
+    Illuminate.<br>
+    <span class="accent">Automate.</span><br>
+    Evolve.
+  </h1>
+
+  <p class="hero-tagline">APOLUX · TECHNOLOGY & AI</p>
+
+  <p class="hero-desc">
+    Transformamos processos manuais em fluxos inteligentes.
+    Automação real, IA aplicada e dashboards que mostram o ROI
+    da sua operação — do WhatsApp ao Google Calendar.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#contato" class="btn-primary">
+      Avaliação gratuita <span class="arrow-icon">→</span>
+    </a>
+    <a href="#servicos" class="btn-secondary">
+      Ver serviços
+    </a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num">40%</span>
+      <span class="stat-label">menos tempo em tarefas manuais</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">24/7</span>
+      <span class="stat-label">atendimento automatizado</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">ROI</span>
+      <span class="stat-label">visível com dashboards em tempo real</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">15min</span>
+      <span class="stat-label">para a primeira reunião diagnóstico</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="centered">
+    <p class="section-label">O que entregamos</p>
+    <h2 class="section-title">Serviços que geram resultado real</h2>
+    <p class="section-sub">Não vendemos ferramentas. Entregamos soluções funcionando — do diagnóstico à operação.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🤖</div>
+      <h3>Chatbot IA no WhatsApp</h3>
+      <p>Atendimento inteligente 24/7, agendamentos, respostas automáticas e qualificação de leads direto no WhatsApp Business.</p>
+      <span class="service-tag">n8n · OpenAI · WhatsApp API</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📅</div>
+      <h3>Agendamento Inteligente</h3>
+      <p>IA identifica o serviço desejado, agenda no Google Calendar e dispara confirmações e lembretes automáticos em 48h, 24h e 2h antes.</p>
+      <span class="service-tag">Google Calendar · Make · IA</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Dashboards & BI</h3>
+      <p>Visibilidade total sobre atendimentos, agendamentos, follow-ups e KPIs de negócio — em uma tela, com dados confiáveis.</p>
+      <span class="service-tag">Looker · Sheets · Python</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📄</div>
+      <h3>Automação de Documentos</h3>
+      <p>Leitura automática de notas fiscais (PDF/XML/foto), geração de relatórios financeiros, cobranças e conciliação de extratos.</p>
+      <span class="service-tag">OCR · Python · Make</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔄</div>
+      <h3>Recuperação & Follow-up</h3>
+      <p>Identifica clientes inativos há 3 ou 6 meses e dispara campanhas personalizadas. Follow-up automatizado de propostas e orçamentos.</p>
+      <span class="service-tag">CRM · n8n · WhatsApp</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚙️</div>
+      <h3>Integração de Sistemas</h3>
+      <p>Conectamos as ferramentas que você já usa. Google Workspace, Notion, HubSpot, ERPs — sem retrabalho manual entre sistemas.</p>
+      <span class="service-tag">Make · Zapier · APIs</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="metodologia">
+  <div class="centered">
+    <p class="section-label">Metodologia</p>
+    <h2 class="section-title">Como trabalhamos</h2>
+    <p class="section-sub">Três fases que garantem resultado sem transtorno na sua operação.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <p class="step-num">FASE 01</p>
+      <div class="step-icon">🔍</div>
+      <h3>Diagnóstico</h3>
+      <p>Mapeamos seus processos atuais, identificamos gargalos e definimos as automações com maior impacto no seu ROI.</p>
+    </div>
+    <div class="step">
+      <p class="step-num">FASE 02</p>
+      <div class="step-icon">🚀</div>
+      <h3>Implementação</h3>
+      <p>Entrega gradual e personalizada, adaptada à realidade do seu negócio, com mínima interrupção das operações.</p>
+    </div>
+    <div class="step">
+      <p class="step-num">FASE 03</p>
+      <div class="step-icon">📈</div>
+      <h3>Acompanhamento</h3>
+      <p>Treinamento da equipe, monitoramento de KPIs e ajustes estratégicos contínuos para garantir resultados consistentes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NICHOS -->
+<section id="nichos">
+  <p class="section-label">Especialidade</p>
+  <h2 class="section-title">Nichos onde somos especialistas</h2>
+  <p class="section-sub">Foco em empresas com 2 a 20 funcionários, operação intensa via WhatsApp e processos ainda manuais.</p>
+  <div class="nichos-grid">
+    <div class="nicho-card">
+      <div class="nicho-header">
+        <span class="nicho-emoji">🏥</span>
+        <div>
+          <h3>Clínicas Médicas & Estéticas</h3>
+          <span>Atendimento, agendamento e retenção de pacientes</span>
+        </div>
+      </div>
+      <ul class="nicho-list">
+        <li>Agendamento via WhatsApp com IA — sem recepcionista manual</li>
+        <li>Lembretes automáticos em 48h, 24h e 2h antes da consulta</li>
+        <li>Pós-consulta: avaliação no Google + oferta de retorno</li>
+        <li>Campanha de reativação para pacientes inativos há 3+ meses</li>
+        <li>Cadastro automático via formulário + orçamentos no WhatsApp</li>
+      </ul>
+    </div>
+    <div class="nicho-card">
+      <div class="nicho-header">
+        <span class="nicho-emoji">📋</span>
+        <div>
+          <h3>Escritórios Contábeis</h3>
+          <span>Documentação, cobrança e atendimento automatizados</span>
+        </div>
+      </div>
+      <ul class="nicho-list">
+        <li>Leitura automática de notas fiscais (PDF, XML e foto)</li>
+        <li>Cobrança automática mensal e alertas de documentos pendentes</li>
+        <li>Geração de relatórios de fluxo de caixa, impostos e faturamento</li>
+        <li>IA para responder dúvidas fiscais frequentes dos clientes</li>
+        <li>Alertas automáticos de vencimentos e obrigações fiscais</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- APOLO -->
+<section id="apolo">
+  <div class="apolo-glow"></div>
+  <div class="apolo-layout">
+    <div class="apolo-text">
+      <div class="apolo-badge">
+        <div class="apolo-badge-icon"></div>
+        <span>FLAGSHIP AI ENGINE</span>
+      </div>
+      <h2>Conheça o<br><strong style="color: var(--blue)">A.P.O.L.O.</strong></h2>
+      <p class="apolo-fullname">Automated Processing & Optimized Learning Operations</p>
+      <p>
+        O motor de inteligência artificial proprietário da Apolux.
+        Desenvolvido para identificar padrões, automatizar fluxos e
+        aprender continuamente com a operação dos nossos clientes.
+      </p>
+      <p>
+        A.P.O.L.O. atua em todas as nossas soluções — da triagem de WhatsApp
+        à leitura de documentos fiscais — entregando automação que evolui
+        conforme o negócio cresce.
+      </p>
+      <div class="apolo-capabilities">
+        <div class="cap-item">
+          <h4>Processamento de linguagem</h4>
+          <p>Entende intenções em linguagem natural no WhatsApp</p>
+        </div>
+        <div class="cap-item">
+          <h4>Leitura de documentos</h4>
+          <p>Extrai dados de PDFs, XMLs e imagens automaticamente</p>
+        </div>
+        <div class="cap-item">
+          <h4>Aprendizado contínuo</h4>
+          <p>Melhora respostas e fluxos com base no histórico</p>
+        </div>
+        <div class="cap-item">
+          <h4>Integração universal</h4>
+          <p>Conecta com Google, CRMs, ERPs e qualquer API</p>
+        </div>
+      </div>
+    </div>
+    <div class="apolo-visual">
+      <div class="apolo-ring-outer">
+        <div class="apolo-ring-inner">
+          <div class="apolo-core">
+            <span class="apolo-core-label">A.P.O.L.O</span>
+            <span>AI ENGINE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FERRAMENTAS -->
+<section id="ferramentas">
+  <p class="section-label">Stack tecnológico</p>
+  <h2 class="section-title">Ferramentas que dominamos</h2>
+  <p class="section-sub">Usamos as melhores ferramentas do mercado, combinadas com desenvolvimento customizado para cada cliente.</p>
+  <div class="tools-row">
+    <div class="tool-pill"><span class="tool-dot"></span>n8n</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Make (Integromat)</div>
+    <div class="tool-pill"><span class="tool-dot"></span>OpenAI API</div>
+    <div class="tool-pill"><span class="tool-dot"></span>LangChain</div>
+    <div class="tool-pill"><span class="tool-dot"></span>WhatsApp Business API</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Google Calendar</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Google Sheets</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Python</div>
+    <div class="tool-pill"><span class="tool-dot"></span>FastAPI</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Angular</div>
+    <div class="tool-pill"><span class="tool-dot"></span>HubSpot CRM</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Notion</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Looker Studio</div>
+    <div class="tool-pill"><span class="tool-dot"></span>GCP</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Azure OpenAI</div>
+    <div class="tool-pill"><span class="tool-dot"></span>FAISS / ChromaDB</div>
+    <div class="tool-pill"><span class="tool-dot"></span>RAG Systems</div>
+    <div class="tool-pill"><span class="tool-dot"></span>Vector Databases</div>
+  </div>
+</section>
+
+<!-- PLANO 90 DIAS -->
+<section id="plano">
+  <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:start;">
+    <div>
+      <p class="section-label">Primeiros 90 dias</p>
+      <h2 class="section-title">Plano de tração inicial</h2>
+      <p class="section-sub" style="margin-top:1rem;">
+        Nosso modelo de entrada focado em gerar portfólio, resultados mensuráveis e os primeiros três clientes âncora.
+      </p>
+      <div style="margin-top:2rem;">
+        <a href="#contato" class="btn-primary">Começar agora →</a>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-dot">01</div>
+        <div class="tl-content">
+          <h3>Primeiro cliente piloto</h3>
+          <p>Identificar um negócio no nicho-alvo, oferecer condições especiais de entrada e documentar o antes e depois com métricas reais.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">02</div>
+        <div class="tl-content">
+          <h3>Construção de portfólio</h3>
+          <p>Transformar resultados em estudo de caso. Coletar depoimentos e publicar no LinkedIn como prova de entrega.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">03</div>
+        <div class="tl-content">
+          <h3>Três clientes fechados</h3>
+          <p>Com portfólio e ROI documentado, fechar mais dois clientes usando prospecção ativa no Google Maps, LinkedIn e indicações.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot">04</div>
+        <div class="tl-content">
+          <h3>Escala e autoridade</h3>
+          <p>Presença digital consolidada, preços ajustados ao valor entregue e pipeline de novos clientes operando de forma consistente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contato">
+  <div class="cta-glow"></div>
+  <div class="cta-card">
+    <p class="section-label">Avaliação gratuita</p>
+    <h2>Pronto para automatizar sua operação?</h2>
+    <p>Em 15 minutos identificamos onde você está perdendo tempo e dinheiro — e mostramos como resolver.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/5511993253806" class="btn-primary">WhatsApp (11) 99325-3806 →</a>
+      <a href="https://wa.me/5511932307892" class="btn-primary">WhatsApp (11) 93230-7892 →</a>
+    </div>
+    <div class="cta-contact">
+      <a href="mailto:apoluxai@gmail.com">apoluxai@gmail.com</a>
+      <a href="#">linkedin.com/company/apolux</a>
+      <a href="#">São Bernardo do Campo · SP</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">APOLUX</div>
+    <div class="footer-tag">ILLUMINATE · AUTOMATE · EVOLVE</div>
+  </div>
+  <p>© 2025 Apolux Technology & AI · Retori Apolônio Brothers</p>
+</footer>
+
+</body>
+</html>
